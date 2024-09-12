@@ -55,22 +55,6 @@ root/
    | .gitpod.dockerfile
    | docker-compose.yaml
 ```
-## Getting started
-
-The following commands are assumed to run in the `capstone_llm` subdirectory.
-- create a virtualenv: `python3 -m venv venv`
-- using dependencies: 
-  - add the dependencies to the requirements.in
-  - generate correct versions + transitive dependencies using: `pip-compile requirements.in`
-  - install the dependencies in your virtual environment using `pip install -r requirements.txt`
-  - note: the provided dockerfile already packages pyspark 3.5.1, so you only need to specify this in your dev-requirements.in. 
-    This way you have spark available when running locally, but it is not packaged twice when running in Docker.
-- 2 places to write your transformation logic:
-  - clean.py: your pyspark cleaning code
-  - ingest.py: see task 3bis (only if you have time left)
-- run the tasks
-  - install the project in your venv directory as follows: `pip install -e .`
-  - run a task: `python3 -m capstonellm.tasks.clean` or `python3 -m capstonellm.tasks.ingest`
 
 ## Task 1: Transform and load the stackoverflow data
 
@@ -91,6 +75,23 @@ So your goal is to extract the relevant fields from both the questions and answe
 Write the json documents per question again to s3 under path `cleaned/{tag}`
 
 If you are confident in your code, the next step is scheduling it using Airflow
+
+## How to run your project
+
+The following commands are assumed to run in the `capstone_llm` subdirectory.
+- create a virtualenv: `python3 -m venv venv`
+- using dependencies: 
+  - add the dependencies to the requirements.in
+  - generate correct versions + transitive dependencies using: `pip-compile requirements.in`
+  - install the dependencies in your virtual environment using `pip install -r requirements.txt`
+  - note: the provided dockerfile already packages pyspark 3.5.1, so you only need to specify this in your dev-requirements.in. 
+    This way you have spark available when running locally, but it is not packaged twice when running in Docker.
+- 2 places to write your transformation logic:
+  - clean.py: your pyspark cleaning code
+  - ingest.py: see task 3bis (only if you have time left)
+- run the tasks
+  - install the project in your venv directory as follows: `pip install -e .`
+  - run a task: `python3 -m capstonellm.tasks.clean` or `python3 -m capstonellm.tasks.ingest`
 
 ## Task 2: schedule your task using Airflow
 
