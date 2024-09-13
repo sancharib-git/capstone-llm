@@ -74,8 +74,8 @@ The S3 bucket resides in us-east-1 region.
 
 Investigate the data, you can download and inspect the json files. Download them as follows:
 ```
-aws s3 ls s3://dataminded-academy-capstone-llm-data-us/input/ #listing the data
-aws s3 cp s3://dataminded-academy-capstone-llm-data-us/input/dbt/questions.json ./ #downloading the json file locally
+aws s3 ls s3://dataminded-academy-capstone-llm-data-us/input/
+aws s3 cp s3://dataminded-academy-capstone-llm-data-us/input/dbt/questions.json ./
 ```
 Start by writing your cleaning transformation by reading/writing local files and only afterwards interact directly with s3.
 
