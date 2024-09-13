@@ -40,20 +40,23 @@ Best is to use the scaffolding as is, as that will make sure you quickly get som
 
 ```bash
 root/
-   | capstone_llm
-      |-- src/
-      |   |-- project/
-      |   |-- |-- common/
-      |   |-- |-- |-- spark.py
-      |   |-- |-- tasks/
-      |-- tests/
-      |   |-- common/
-      |   |-- | -- spark.py
-      |   Dockerfile
-      |   setup.py
+   |-- dags/
+   |-- src/
+   |   |-- project/
+   |   |-- |-- common/
+   |   |-- |-- |-- spark.py
+   |   |-- |-- tasks/
+   |-- tests/
+   |   |-- common/
+   |   |-- | -- spark.py
+   |   Dockerfile
+   |   setup.py
    | .gitpod.yml
    | .gitpod.dockerfile
    | docker-compose.yaml
+   | requirements.txt
+   | requirements.in
+   | setup.py
 ```
 
 ## Task 1: Transform and load the stackoverflow data
@@ -69,10 +72,17 @@ The S3 bucket resides in us-east-1 region.
 
 ### Your task
 
-Start from the input data for 1 tag, the goal is to create 1 text document per question containing the title, question body and the response body.
+Investigate the data, you can download and inspect the json files. Download them as follows:
+```
+aws s3 ls s3://dataminded-academy-capstone-llm-data-us/input/ #listing the data
+aws s3 cp s3://dataminded-academy-capstone-llm-data-us/input/dbt/questions.json ./ #downloading the json file locally
+```
+Start by writing your cleaning transformation by reading/writing local files and only afterwards interact directly with s3.
+
+Given the input data for 1 tag, the goal is to create 1 json document per question containing the title, question body and the response body.
 So your goal is to extract the relevant fields from both the questions and answers and join them together using the `question_id` field.
 
-Write the json documents per question again to s3 under path `cleaned/{tag}`
+Write the json documents per question again to s3 under path `cleaned/<user>/{tag}`
 
 If you are confident in your code, the next step is scheduling it using Airflow
 
@@ -137,11 +147,12 @@ The processing and cleaning, you already did in the cleaning step. This way if y
 Now that we have verified all our code locally, it is now time to deploy it to production environment. 
 In our case this will be Conveyor.
 
-- login to Conveyor
-- create a Conveyor project with the following name: `capstone-llm-{user}` from the `capstone_llm` subfolder.
-- create a dags folder in `capstone_llm` subfolder and migrate your local dags to Conveyor by using the [ConveyorContainerOperatorV2](https://docs.conveyordata.com/technical-reference/airflow/operators/conveyor-container-operator-v2) and the [ConveyorSparkSubmitOperatorV2](https://docs.conveyordata.com/technical-reference/airflow/operators/conveyor-spark-submit-operator-v2)
-  - instead of using the AWS credentials directly, you should attach the `capstone_conveyor_llm` role when running your tasks.  
-- build and deploy your project
+- login to Conveyor: `conveyor auth login`
+- create a Conveyor project with the following name: `capstone-llm-{user}` from the root directory.
+- Tweak teh `conveyor_example.py` to run your job using the [ConveyorContainerOperatorV2](https://docs.conveyordata.com/technical-reference/airflow/operators/conveyor-container-operator-v2).
+- instead of using the AWS credentials directly, as we did locally, you now attach the `capstone_conveyor_llm` role.  
+- to test things out you can run: `conveyor run`
+- build and deploy your project: `conveyor build && conveyor deploy --env test`
 
 ## Useful commands
 Setup virtual environment:

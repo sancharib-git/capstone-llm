@@ -1,7 +1,8 @@
 FROM gitpod/workspace-python:latest
 
-RUN pyenv install 3.11 \
-    && pyenv global 3.11
+# Use the same python version as exists in Spark
+RUN pyenv install 3.10.12 \
+    && pyenv global 3.10.12
 
 RUN wget "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -O "awscliv2.zip" && \
     unzip awscliv2.zip && \

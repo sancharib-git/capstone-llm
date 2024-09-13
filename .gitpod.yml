@@ -25,6 +25,10 @@ tasks:
     command: |
       sudo apt-get update
       sudo apt-get install openjdk-8-jdk-headless -qq
+  - name: Install conveyor
+    init: curl -s https://static.conveyordata.com/cli-install/install.sh | bash
+    command: |
+      curl -s https://static.conveyordata.com/cli-install/update.sh | bash
   - name: Boot Airflow
     init: |
       gp sync-await pull
