@@ -28,7 +28,7 @@ def main():
     if args.env == "local":
         session = (
             SparkSession.builder.appName("Spark S3 Integration")
-            .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.3.4")
+            .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.3.6")
             .getOrCreate()
         )
         clean(session, args.env, args.tag)
