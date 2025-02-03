@@ -1,35 +1,36 @@
 # Dataminded Capstone LLM
 
-Welcome to the Capstone project! Everything you've learned over the past days will now be integrated in a realistic data pipeline. 
+Welcome to the Capstone project! Everything you've learned over the past days will now be integrated in a realistic data pipeline.
 The training wheels are off, but we're still at the sideline, cheering you on and supporting you when needed.
 
 In a nutshell, here's what you will do:
 
 Read, transform and load stackoverflow data from S3 with PySpark and cleaning it such that it can be used by a llm model.
 We want to find out if we can improve an existing foundational model by providing it relevant data on specific topics in the form of stackoverflow questions and answers.
-Since these foundational models don't always contain the most recent changes, they might provide outdated results. 
+Since these foundational models don't always contain the most recent changes, they might provide outdated results.
 Your task is thus to improve the llm by feeding it the right data.
 
 You will start by building the code for the ingestion pipeline locally and scheduling it using Airflow.
 If this is going well, we will run it on a cloud platform, called [Conveyor](https://conveyordata.com/).
 
-To get started We've set up a Gitpod environment containing all the tools required to complete this exercise (awscli, python, vscode, ...). 
+To get started We've set up a GitHub Codespaces environment containing all the tools required to complete this exercise (awscli, python, vscode, ...).
 You can access this environment by clicking the button below:
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/datamindedacademy/capstone-llm)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/datamindedacademy/capstone-llm)
 
-NOTE: When you fork the code repo to your own remote make sure to change the Gitpod URL to reflect your account in this README!
+NOTE: When you fork the code repo to your own remote make sure to change the GitHub Codespaces URL to reflect your account in this README!
 
-## Gitpod environment
+## GitHub Codespaces environment
+
 This is an ubuntu-based environment pre-installed with:
 
 - VSCode
 - A Python3 virtual environment: we recommend you always work inside this environment.
 - The AWS CLI
 
-IMPORTANT: Create a new branch and periodically push your work to the remote. 
-After 30min of inactivity this environment shuts down and you will likely lose unsaved progress. 
-As stated before, change the Gitpod URL to reflect your remote.
+IMPORTANT: Create a new branch and periodically push your work to the remote.
+After 30min of inactivity this environment shuts down and you will likely lose unsaved progress.
+As stated before, change the GitHub Codespaces URL to reflect your remote.
 
 ## Project setup
 
@@ -49,20 +50,17 @@ root/
    |-- tests/
    |   |-- common/
    |   |-- | -- spark.py
-   |   Dockerfile
-   |   setup.py
-   | .gitpod.yml
-   | .gitpod.dockerfile
+   | Dockerfile
+   | .codespaces.dockerfile
    | docker-compose.yaml
-   | requirements.txt
-   | requirements.in
-   | setup.py
+   | pyproject.toml
 ```
 
 ## Task 1: Transform and load the stackoverflow data
 
 ### Context
-Our team already ingested questions and answers from StackOverflow for you to use. 
+
+Our team already ingested questions and answers from StackOverflow for you to use.
 We used the [stackoverflow API](https://api.stackexchange.com/docs).
 We ingested different tags, pick one of them with your table (3-4 peopla) as a starting point for cleaning your data.
 This helps to distribute who is working on which data.
@@ -73,10 +71,12 @@ The S3 bucket resides in us-east-1 region.
 ### Your task
 
 Investigate the data, you can download and inspect the json files. Download them as follows:
+
 ```
 aws s3 ls s3://dataminded-academy-capstone-llm-data-us/input/
 aws s3 cp s3://dataminded-academy-capstone-llm-data-us/input/dbt/questions.json ./
 ```
+
 Start by writing your cleaning transformation by reading/writing local files and only afterwards interact directly with s3.
 
 Given the input data for 1 tag, the goal is to create 1 json document per question containing the title, question body and the response body.
@@ -89,12 +89,13 @@ If you are confident in your code, the next step is scheduling it using Airflow
 ## How to run your project
 
 The following commands are assumed to run in the `capstone_llm` subdirectory.
+
 - create a virtualenv: `python3 -m venv venv`
-- using dependencies: 
+- using dependencies:
   - add the dependencies to the requirements.in
   - generate correct versions + transitive dependencies using: `pip-compile requirements.in`
   - install the dependencies in your virtual environment using `pip install -r requirements.txt`
-  - note: the provided dockerfile already packages pyspark 3.5.1, so you only need to specify this in your dev-requirements.in. 
+  - note: the provided dockerfile already packages pyspark 3.5.1, so you only need to specify this in your dev-requirements.in.
     This way you have spark available when running locally, but it is not packaged twice when running in Docker.
 - 2 places to write your transformation logic:
   - clean.py: your pyspark cleaning code
@@ -109,6 +110,7 @@ As you know have working python code. We now want to make sure this is triggered
 We start with a local installation of Airflow, you can use the `docker-compose.yml` file, similar to the setup used in the Airflow session.
 
 ### Your task
+
 - package the python code in a Dockerfile. If you used the provided scaffolding, this should be easy. Take a look at the Dockerfile and make sure you understand everything
 - create an Airflow dag with one task (clean) that will run your clean job using the [DockerOperator](https://airflow.apache.org/docs/apache-airflow/1.10.9/_api/airflow/operators/docker_operator/index.html).
   In order to access s3, you will have to pass your credentials to the docker container.
@@ -132,41 +134,38 @@ Go to the knowledge base and reprocess the input data again.
 See if now the model returns more accurate results. Try for example the exact question that fits in your input data?
 
 ## Task 3bis: Ingest the stackoverflow data
+
 NOTE: This is an optional task, if you still have time.
 
 The goal here is to create the input data yourself instead of relying on the data that we have provided.
 In order to do this you will have to investigate the [Stackoverflow API](https://api.stackexchange.com/docs).
 You should call the API and fetch the questions and answers separately, which can be done as follows:
+
 - Query the questions given 1 or more specified tags
 - Using the question ids from the previous step, look for the relevant answers
 
-As a best practice this raw data is not preprocessed/cleaned but dumped as is in the s3 bucket under path `/input/{user}/{tag}`.
+As a best practice this raw data is not pre-processed/cleaned but dumped as is in the S3 bucket under path `/input/{user}/{tag}`.
 The processing and cleaning, you already did in the cleaning step. This way if you made a mistake while cleaning, you can start again from the raw data without calling the API again.
 
 ## Task 4: deploy to Conveyor
-Now that we have verified all our code locally, it is now time to deploy it to production environment. 
+
+Now that we have verified all our code locally, it is now time to deploy it to production environment.
 In our case this will be Conveyor.
 
-- login to Conveyor: `conveyor auth login`
-- create a Conveyor project with the following name: `capstone-llm-{user}` from the root directory.
-- Tweak teh `conveyor_example.py` to run your job using the [ConveyorContainerOperatorV2](https://docs.conveyordata.com/technical-reference/airflow/operators/conveyor-container-operator-v2).
-- instead of using the AWS credentials directly, as we did locally, you now attach the `capstone_conveyor_llm` role.  
+- Login to Conveyor: `conveyor auth login`
+- Create a Conveyor project with the following name: `capstone-llm-{user}` from the root directory.
+- Tweak the `conveyor_example.py` to run your job using the [ConveyorContainerOperatorV2](https://docs.conveyordata.com/technical-reference/airflow/operators/conveyor-container-operator-v2).
+- instead of using the AWS credentials directly, as we did locally, you now attach the `capstone_conveyor_llm` role.
 - to test things out you can run: `conveyor run`
 - build and deploy your project: `conveyor build && conveyor deploy --env test`
 
 ## Useful commands
+
 Setup virtual environment:
-- `pyenv local` to use a correct python version
-- `python -m venv venv` to create a virtual environment
+
 - `source ./venv/bin/activate` to activate the virtual environment
-- `pip install pip-tools` to install pip tools
 
 Tasks:
-- `pip install -r requirements.txt` to install dependencies
-- `pip install -r dev-requirements.txt` to install development dependencies
-- `pip install -e .` to install the project in editable mode
-- `python -m pytest --cov=src tests` runs all the tests and check coverage
-- `python -m black dags src tests --check` checks PEP8 compliance issues
-- `python -m black dags src tests` fixes PEP8 compliance issues
-- `pip-compile requirements.in` if you add new requirements this regenerates a new requirements.txt
-- `pip-compile dev-requirements.in` if you add new requirements this regenerates a new dev-requirements.txt, you should also do this when have updated your requirements.in
+
+- `uv sync` to install the dependencies in a virtual environment
+- `uv export --format requirements-txt > equirements.txt` to export the dependencies to a requirements.txt file

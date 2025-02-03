@@ -1,0 +1,42 @@
+{
+  "name": "capstone-llm",
+  "build": {
+    "dockerfile": "../.codespaces.dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/saml-to/devcontainer-features/assume-aws-role:2": {
+      "role": "arn:aws:iam::338791806049:role/seasonal-school-codespaces-role"
+    }
+  },
+  "remoteUser": "vscode",
+  "containerUser": "vscode",
+  "postCreateCommand": "docker compose up -d",
+  "postStartCommand": "uv sync --frozen",
+  "workspaceFolder": "/workspace/capstone-llm",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace/capstone-llm,type=bind",
+  "forwardPorts": [5555, 8080],
+  "portsAttributes": {
+    "5555": {
+      "label": "Port 5555",
+      "onAutoForward": "ignore",
+      "elevateIfNeeded": true
+    },
+    "8080": {
+      "label": "Port 8080",
+      "onAutoForward": "openBrowser",
+      "elevateIfNeeded": true
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "tamasfe.even-better-toml",
+        "ms-python.debugpy",
+        "ms-python.debugpy",
+        "charliermarsh.ruff"
+      ]
+    }
+  }
+}
