@@ -62,7 +62,7 @@ root/
 
 Our team already ingested questions and answers from StackOverflow for you to use.
 We used the [stackoverflow API](https://api.stackexchange.com/docs).
-We ingested different tags, pick one of them with your table (3-4 peopla) as a starting point for cleaning your data.
+We ingested different tags, pick one of them with your table (3-4 people) as a starting point for cleaning your data.
 This helps to distribute who is working on which data.
 
 The input data is stored in the following s3 bucket: `dataminded-academy-capstone-llm-data-us` under path `input/{tag}/`
@@ -100,6 +100,8 @@ The following commands are assumed to run in the `capstone_llm` subdirectory.
 - run the tasks
   - install the project in your venv directory as follows: `pip install -e .`
   - run a task: `python3 -m capstonellm.tasks.clean` or `python3 -m capstonellm.tasks.ingest`
+  - you can check if your task ran correctly by running `pytest tests/test_clean.py`
+
 
 ## Task 2: schedule your task using Airflow
 
