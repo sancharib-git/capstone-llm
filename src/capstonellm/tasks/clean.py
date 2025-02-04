@@ -1,14 +1,13 @@
 import argparse
 import logging
 from pyspark.sql import SparkSession
-
-from stackoverlfowetl.common.catalog import llm_bucket
+from capstonellm.common.catalog import llm_bucket
 from capstonellm.common.spark import ClosableSparkSession
 
 logger = logging.getLogger(__name__)
 
 def clean(spark: SparkSession, environment: str, tag: str):
-    print(llm_bucket)
+    pass
 
 def main():
     parser = argparse.ArgumentParser(description="capstone_llm")
@@ -30,7 +29,7 @@ def main():
         print("This is a local execution of the capestonellm project")
         session = (
             SparkSession.builder.appName("Spark S3 Integration")
-            .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.3.6")
+            .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.3.4")
             .getOrCreate()
         )
         clean(session, args.env, args.tag)
