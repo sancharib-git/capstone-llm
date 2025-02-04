@@ -7,3 +7,6 @@ config
 logs
 plugins
 
+build
+
+*.egg-info
