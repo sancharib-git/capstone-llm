@@ -2,12 +2,13 @@ import argparse
 import logging
 from pyspark.sql import SparkSession
 
+from stackoverlfowetl.common.catalog import llm_bucket
 from capstonellm.common.spark import ClosableSparkSession
 
 logger = logging.getLogger(__name__)
 
 def clean(spark: SparkSession, environment: str, tag: str):
-    pass
+    print(llm_bucket)
 
 def main():
     parser = argparse.ArgumentParser(description="capstone_llm")
