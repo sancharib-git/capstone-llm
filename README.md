@@ -92,11 +92,8 @@ The following commands are assumed to run in the `capstone_llm` subdirectory.
 
 - create a virtualenv: `python3 -m venv venv`
 - using dependencies:
-  - add the dependencies to the requirements.in
-  - generate correct versions + transitive dependencies using: `pip-compile requirements.in`
+  - add dependencies in requirements.txt
   - install the dependencies in your virtual environment using `pip install -r requirements.txt`
-  - note: the provided dockerfile already packages pyspark 3.5.1, so you only need to specify this in your dev-requirements.in.
-    This way you have spark available when running locally, but it is not packaged twice when running in Docker.
 - 2 places to write your transformation logic:
   - clean.py: your pyspark cleaning code
   - ingest.py: see task 3bis (only if you have time left)
