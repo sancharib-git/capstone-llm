@@ -12,7 +12,7 @@ def clean(spark: SparkSession, environment: str, tag: str):
 def main():
     parser = argparse.ArgumentParser(description="capstone_llm")
     parser.add_argument(
-        "-e", "--env", dest="env", help="environment we are executing in", required=True
+        "-e", "--env", dest="env", help="environment we are executing in", required=False, default="local"
     )
     parser.add_argument(
         "-t", "--tag", dest="tag", help="the tag to process",
@@ -26,6 +26,7 @@ def main():
         "spark.hadoop.fs.s3a.aws.credentials.provider": "com.amazonaws.auth.DefaultAWSCredentialsProviderChain",
     }
     if args.env == "local":
+        print("This is a local execution of the capestonellm project")
         session = (
             SparkSession.builder.appName("Spark S3 Integration")
             .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.3.6")
