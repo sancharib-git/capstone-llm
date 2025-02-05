@@ -62,8 +62,7 @@ root/
 
 Our team already ingested questions and answers from StackOverflow for you to use.
 We used the [stackoverflow API](https://api.stackexchange.com/docs).
-We ingested different tags, pick one of them with your table (3-4 people) as a starting point for cleaning your data.
-This helps to distribute who is working on which data.
+We ingested different tags, pick one of them as a starting point for cleaning your data.
 
 The input data is stored in the following s3 bucket: `dataminded-academy-capstone-llm-data-us` under path `input/{tag}/`
 The S3 bucket resides in us-east-1 region.
@@ -88,18 +87,18 @@ If you are confident in your code, the next step is scheduling it using Airflow
 
 ## How to run your project
 
-The following commands are assumed to run in the `capstone_llm` subdirectory.
+The following commands are assumed to run in the root of your project.
 
-- create a virtualenv: `python3 -m venv venv`
+- create a virtualenv: `uv venv`
 - using dependencies:
-  - add dependencies in requirements.txt
-  - install the dependencies in your virtual environment using `pip install -r requirements.txt`
+  - add dependencies in pyproject.toml or use `uv add <pacakage>`
+  - install the dependencies in your virtual environment using `uv sync`
 - 2 places to write your transformation logic:
   - clean.py: your pyspark cleaning code
   - ingest.py: see task 3bis (only if you have time left)
 - run the tasks
-  - install the project in your venv directory as follows: `pip install -e .`
-  - run a task: `python3 -m capstonellm.tasks.clean` or `python3 -m capstonellm.tasks.ingest`
+  - install the project in your venv directory as follows: `uv pip install -e .`
+  - run a task: `uv run python3 -m capstonellm.tasks.clean` or `uv run python3 -m capstonellm.tasks.ingest`
   - you can check if your task ran correctly by running `pytest tests/test_clean.py`
 
 
@@ -114,25 +113,7 @@ We start with a local installation of Airflow, you can use the `docker-compose.y
 - create an Airflow dag with one task (clean) that will run your clean job using the [DockerOperator](https://airflow.apache.org/docs/apache-airflow/1.10.9/_api/airflow/operators/docker_operator/index.html).
   In order to access s3, you will have to pass your credentials to the docker container.
 
-## Task 3: Test out the basic llm
-
-The next step is to start using your prepared data in the llm.
-Before feeding the data, let's test the performance of the current model by asking it some questions:
-
-```
-curl --location 'https://kfkjc4ha7crhz6s3uat54wtj6m0bgtdf.lambda-url.eu-west-1.on.aws' \
---header 'Content-Type: application/json' \
---data '{
-    "query":"What is the equivalent of `DataFrame.drop_duplicates()` from pandas in polars?"
-}'
-```
-
-### Your task
-
-Go to the knowledge base and reprocess the input data again.
-See if now the model returns more accurate results. Try for example the exact question that fits in your input data?
-
-## Task 3bis: Ingest the stackoverflow data
+## Task 3: Ingest the stackoverflow data
 
 NOTE: This is an optional task, if you still have time.
 
@@ -167,4 +148,6 @@ Setup virtual environment:
 Tasks:
 
 - `uv sync` to install the dependencies in a virtual environment
+- `uv pip install -e .` to install the current project in your virtual environment
 - `uv export --format requirements-txt > equirements.txt` to export the dependencies to a requirements.txt file
+- `uv run python3 -m capstonellm.tasks.clean` run clean task locally
