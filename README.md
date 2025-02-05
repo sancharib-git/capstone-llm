@@ -149,5 +149,6 @@ Tasks:
 
 - `uv sync` to install the dependencies in a virtual environment
 - `uv pip install -e .` to install the current project in your virtual environment
+- `docker compose up -d` to start the airflow server
 - `uv export --format requirements-txt > equirements.txt` to export the dependencies to a requirements.txt file
 - `uv run python3 -m capstonellm.tasks.clean` run clean task locally
