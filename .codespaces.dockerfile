@@ -9,7 +9,10 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 RUN apt-get update && apt-get install -y openjdk-17-jdk
 
 # Install Conveyor
-RUN curl -s https://static.conveyordata.com/cli-install/install.sh | bash
+wget https://app.conveyordata.com/api/info/cli/location/linux/amd64 -O conveyor_linux_amd64.tar.gz && \
+    tar -zxvf conveyor_linux_amd64.tar.gz && \
+    chmod +x bin/linux/amd64/conveyor &&\
+    cp bin/linux/amd64/conveyor /usr/local/bin/conveyor
 
 # Install AWS CLI
 RUN wget "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -O "awscliv2.zip" && \
