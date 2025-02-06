@@ -14,7 +14,7 @@ default_args = {
 }
 
 with DAG(
-    "docker_operator_dag",
+    "docker_operator_dag_<name>",
     default_args=default_args,
     catchup=False,
 ) as dag:
