@@ -56,6 +56,18 @@ root/
    | pyproject.toml
 ```
 
+## AWS access
+In order to access the necessary data on s3, you will need to configure your AWS credentials.
+You can do this by running `aws configure` and filling in the necessary information.
+We will provide you with individual `access_key_id` and `secret_access_key`.
+
+After this you should be able to successfully run the following command:
+```bash
+aws s3 ls s3://dataminded-academy-capstone-llm-data-us/input/
+```
+
+If this works, you are ready to start the project.
+
 ## Task 1: Transform and load the stackoverflow data
 
 ### Context
