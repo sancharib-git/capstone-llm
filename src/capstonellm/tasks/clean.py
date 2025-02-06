@@ -3,11 +3,24 @@ import logging
 from pyspark.sql import SparkSession
 from capstonellm.common.catalog import llm_bucket
 from capstonellm.common.spark import ClosableSparkSession
+import os
+import json
 
 logger = logging.getLogger(__name__)
 
 def clean(spark: SparkSession, environment: str, tag: str):
-    pass
+    # write answer here
+    output_dir = f"cleaned/{tag}/"
+    # read the json file from s3
+    df = spark.read.json("questions.json")
+    items = df.collect()
+    for index, item in enumerate(items):
+        item_dict = item.asDict()  # Convert Row to dictionary
+        output_file = os.path.join(output_dir, f"item_{index + 1}.json")
+    
+        # Write each item to a separate file
+        with open(output_file, 'x') as f:
+            json.dump(item_dict, f)
 
 def main():
     parser = argparse.ArgumentParser(description="capstone_llm")
