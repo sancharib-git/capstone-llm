@@ -16,7 +16,7 @@ def s3_path() -> str:
     return destination
 
 def test_environment_credentials():
-    for env_var in ["AWS_SECRET_ACCESS_KEY", "AWS_ACCESS_KEY_ID", "AWS_SESSION_TOKEN"]:
+    for env_var in ["AWS_SECRET_ACCESS_KEY", "AWS_ACCESS_KEY_ID"]:
         if not os.environ.get(env_var):
             raise Exception("Missing at least one required environment variable for connecting to AWS.")
 
