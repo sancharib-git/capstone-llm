@@ -1,7 +1,6 @@
 import boto3
 import json
-import pdb
-import polars as pl
+
 
 from capstonellm.common import catalog
 
@@ -9,7 +8,7 @@ from capstonellm.common import catalog
 s3 = boto3.client('s3')
 path_to_sql_questions = "input/sql/questions.json"
 path_to_sql_answers = "input/sql/answers.json"
-path_to_cleaned = "test/cleaned/sql"
+path_to_cleaned = "cleaned/sanchari/test/sql"
 questions = s3.get_object(Bucket=catalog.llm_bucket, Key=path_to_sql_questions)
 answers = s3.get_object(Bucket=catalog.llm_bucket, Key=path_to_sql_answers)
 json_file_path = "s3://dataminded-academy-capstone-llm-data-us/input/dbt/questions.json"

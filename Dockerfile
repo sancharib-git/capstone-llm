@@ -5,3 +5,12 @@ ENV PYSPARK_PYTHON python3
 WORKDIR /opt/spark/work-dir
 
 #TODO add your project code and dependencies to the image
+COPY . /opt/spark/work-dir
+RUN pip install uv
+RUN uv sync
+RUN uv pip install -e .
+RUN pip install -r requirements.txt
+CMD python3 src/capstonellm/tasks/clean_json.py
+
+
+
